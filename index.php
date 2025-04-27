@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
             padding: 20px;
         }
@@ -45,6 +45,18 @@
             border-radius: 4px;
             word-break: break-all;
         }
+        .copy-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 40px;
+        }
+        .copy-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -69,10 +81,34 @@
         
         <?php if ($hashedPassword): ?>
         <div class="result">
+            <strong>Original Password:</strong><br>
+            <span><?php echo htmlspecialchars($_POST['password']); ?></span>
+            <hr style="margin: 10px 0; border-top: 1px solid #ccc;">
             <strong>Hashed Password:</strong><br>
-            <?php echo htmlspecialchars($hashedPassword); ?>
+            <span id="hashValue"><?php echo htmlspecialchars($hashedPassword); ?></span>
+            <button onclick="copyHash()" class="copy-btn">Copy</button>
         </div>
         <?php endif; ?>
     </div>
+
+    <script>
+    function copyHash() {
+        const hashValue = document.getElementById('hashValue');
+        const textArea = document.createElement('textarea');
+        textArea.value = hashValue.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Optional: Visual feedback
+        const copyBtn = document.querySelector('.copy-btn');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+        }, 2000);
+    }
+    </script>
 </body>
 </html>
